@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Paddy Disease Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <h1>Paddy Disease Detector</h1>
+
+    <div class="container">
+
+        <!-- Left panel -->
+        <div class="left-panel">
+            <div class="image-box">
+                {% if image_path %}
+                <img id="preview" src="/{{ image_path }}" alt="" style="display:block;">
+                {% else %}
+                <img id="preview" src="" alt="" style="display:none;">
+                {% endif %}
+            </div>
+
+            <form action="/predict" method="post" enctype="multipart/form-data">
+                <label for="file-upload" class="upload-btn">Upload Image</label>
+                <input id="file-upload" type="file" name="file" accept=".jpg,.jpeg,.png" required
+                    onchange="previewImage(event)">
+
+                <button type="submit" class="predict-btn">Find the Disease</button>
+            </form>
+
+            <button onclick="resetPage()" class="reset-btn">Try Another Image</button>
+        </div>
+
+        <!-- Right panel -->
+        <div class="right-panel">
+            {% if prediction %}
+            <h2>Disease: {{ prediction }}</h2>
+            <h3>Solution:</h3>
+            <p>{{ solution }}</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const preview = document.getElementById('preview');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.style.display = "block";
+        }
+
+        function resetPage() {
+            window.location.href = "/";
+        }
+    </script>
+
+</body>
+
+</html>
